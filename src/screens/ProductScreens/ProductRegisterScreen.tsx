@@ -1,36 +1,62 @@
+// screens/ProductRegisterScreen.tsx
 import React, { useState } from "react";
-import { View, Text, Button, StyleSheet } from "react-native";
-import { IProduct } from "../api/types/IProduct";
-import { createProduct } from "../api/services/ProductServices";
-import ProductForm from "../components/ProductForm";
+import { View, StyleSheet, Alert, ActivityIndicator } from "react-native";
+import { useNavigation } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { ProductStackParamList } from "../../navigations/types";
+import { IProduct } from "../../api/types/IProduct";
+import { createProduct } from "../../api/services/ProductServices";
+import ProductForm from "../../components/ProductForm";
 
-const ProductRegisterScreen = () => {
-  const [form, setForm] = useState<IProduct>({
-    id_product: "",
-    name: "",
-    description: "",
-    price: "",
-    stock: "",
-    status: "",
-  });
-  const handleChange = (name: string, value: string) => {
-    setForm({ ...form, [name]: value });
+const ProductRegisterScreen: React.FC = () => {
+  const [loading, setLoading] = useState(false);
+  const navigation = useNavigation<NativeStackNavigationProp<ProductStackParamList>>();
+
+  const handleSubmit = async (productData: IProduct) => {
+    try {
+      setLoading(true);
+      await createProduct(productData);
+      Alert.alert(
+        "Éxito",
+        "Producto registrado correctamente",
+        [
+          {
+            text: "OK",
+            onPress: () => navigation.goBack(),
+          },
+        ]
+      );
+    } catch (error) {
+      Alert.alert("Error", "No se pudo registrar el producto");
+    } finally {
+      setLoading(false);
+    }
   };
-  const registerProduct = async () => {
-    const register = await createProduct(form);
-  };
+
+  if (loading) {
+    return (
+      <View style={styles.centerContainer}>
+        <ActivityIndicator size="large" color="#007bff" />
+      </View>
+    );
+  }
+
   return (
-    <View>
-      <ProductForm form={form} handleChange={handleChange} />
-      <Button title="Guardar" onPress={registerProduct} />
+    <View style={styles.container}>
+      <ProductForm onSubmit={handleSubmit} buttonText="Registrar Producto" />
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
-  title: {
-    fontSize: 50,
-    textAlign: "center",
+  container: {
+    flex: 1,
+    backgroundColor: "#fff",
+  },
+  centerContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
   },
 });
 

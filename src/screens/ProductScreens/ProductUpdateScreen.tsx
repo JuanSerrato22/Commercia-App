@@ -1,50 +1,91 @@
-import React, { useEffect, useState } from "react";
-import { View, Text, Button, StyleSheet } from "react-native";
-import { RouteProp, useRoute } from "@react-navigation/native";
-import { ProducttackParamsList } from "../navigations/types";
-import { getByIdProduct, updateProduct } from "../api/services/ProductServices";
-import { IProduct } from "../api/types/IProduct";
-import BookForm from "../components/ProductForm";
+// screens/ProductUpdateScreen.tsx
+import React, { useState, useEffect } from "react";
+import { View, StyleSheet, Alert, ActivityIndicator } from "react-native";
+import { useNavigation, useRoute } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { RouteProp } from "@react-navigation/native";
+import { ProductStackParamList } from "../../navigations/types";
+import { IProduct } from "../../api/types/IProduct";
+import { getByIdProduct, updateProduct } from "../../api/services/ProductServices";
+import ProductForm from "../../components/ProductForm";
 
-type DetailsRouteProp = RouteProp<ProducttackParamsList, "ProductUpdate">;
+type ProductUpdateScreenRouteProp = RouteProp<ProductStackParamList, "ProductUpdate">;
 
-export default function ProductUpdateScreen () {
-  const [form, setForm] = useState<IProduct>({
-    id_product: "",
-    name: "",
-    description: "",
-    price: "",
-    stock: "",
-    status: "",
-  });
-  const route = useRoute<DetailsRouteProp>();
+const ProductUpdateScreen: React.FC = () => {
+  const [loading, setLoading] = useState(false);
+  const [initialData, setInitialData] = useState<IProduct | undefined>(undefined);
+  const navigation = useNavigation<NativeStackNavigationProp<ProductStackParamList>>();
+  const route = useRoute<ProductUpdateScreenRouteProp>();
+
   const { id } = route.params;
-  useEffect(() => {
-    const fetchData = async () => {
-      const response = await getByIdProduct(Number(id));
-      setForm(response);
-    };
 
-    fetchData();
-  }, []);
-  const handleChange = (name: string, value: string) => {
-    setForm({ ...form, [name]: value });
+  useEffect(() => {
+    loadProduct();
+  }, [id]);
+
+  const loadProduct = async () => {
+    try {
+      setLoading(true);
+      const data = await getByIdProduct(id);
+      setInitialData(data);
+    } catch (error) {
+      Alert.alert("Error", "No se pudo cargar el producto");
+      navigation.goBack();
+    } finally {
+      setLoading(false);
+    }
   };
-  const requestUpdateProduct = async () => {
-    const register = await updateProduct(Number(id), form);
+
+  const handleSubmit = async (productData: IProduct) => {
+    try {
+      setLoading(true);
+      await updateProduct(id, productData);
+      Alert.alert(
+        "Éxito",
+        "Producto actualizado correctamente",
+        [
+          {
+            text: "OK",
+            onPress: () => navigation.goBack(),
+          },
+        ]
+      );
+    } catch (error) {
+      Alert.alert("Error", "No se pudo actualizar el producto");
+    } finally {
+      setLoading(false);
+    }
   };
+
+  if (loading) {
+    return (
+      <View style={styles.centerContainer}>
+        <ActivityIndicator size="large" color="#007bff" />
+      </View>
+    );
+  }
 
   return (
-    <View>
-      <BookForm form={form} handleChange={handleChange} />
-      <Button title="Guardar" onPress={requestUpdateProduct} />
+    <View style={styles.container}>
+      <ProductForm
+        onSubmit={handleSubmit}
+        initialData={initialData}
+        buttonText="Actualizar Producto"
+      />
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
-  title: {
-    fontSize: 50,
-    textAlign: "center",
+  container: {
+    flex: 1,
+    backgroundColor: "#fff",
+  },
+  centerContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
   },
 });
+
+export default ProductUpdateScreen;

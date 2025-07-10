@@ -30,7 +30,7 @@ export const getAllProduct = async () => {
   }
 };
 
-export const getByIdProduct = async (id: number) => {
+export const getByIdProduct = async (id: string) => {
   try {
     const response = await fetch(PRODUCT_END_POINT + id);
 
@@ -43,7 +43,7 @@ export const getByIdProduct = async (id: number) => {
   }
 };
 
-export const updateProduct = async (id: number, register: IProduct) => {
+export const updateProduct = async (id: string, register: IProduct) => {
   try {
     const response = await fetch(PRODUCT_END_POINT + id, {
       method: "PUT",
