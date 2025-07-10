@@ -1,48 +1,31 @@
-// components/ProductForm.tsx
 import React, { useState, useEffect } from "react";
 import { View, Text, TextInput, StyleSheet, TouchableOpacity, Alert } from "react-native";
-import { IProduct } from "../api/types/IProduct";
-import { getAllCategory } from "../api/services/CategoryServices";
 import { ICategory } from "../api/types/ICategory";
 import { Picker } from "@react-native-picker/picker";
 
 interface Props {
-  onSubmit: (product: IProduct) => void;
-  initialData?: IProduct;
+  onSubmit: (category: ICategory) => void;
+  initialData?: ICategory;
   buttonText?: string;
 }
 
-const ProductForm: React.FC<Props> = ({ onSubmit, initialData, buttonText = "Guardar" }) => {
-  const [formData, setFormData] = useState<IProduct>({
-    id_product: "",
+const CategoryForm: React.FC<Props> = ({ onSubmit, initialData, buttonText = "Guardar" }) => {
+  const [formData, setFormData] = useState<ICategory>({
+    id_category: "",
     name: "",
     description: "",
-    price: "",
-    stock: "",
     status: "1",
-    id_category: "",
   });
-  const [categories, setCategories] = useState<ICategory[]>([]);
 
   useEffect(() => {
     if (initialData) {
       setFormData(initialData);
     }
-    loadCategories();
   }, [initialData]);
 
-  const loadCategories = async () => {
-    try {
-      const data = await getAllCategory();
-      setCategories(data);
-    } catch (error) {
-      Alert.alert("Error", "No se pudieron cargar las categorías");
-    }
-  };
-
   const handleSubmit = () => {
-    if (!formData.name || !formData.price || !formData.stock || !formData.id_category) {
-      Alert.alert("Error", "Por favor complete todos los campos obligatorios");
+    if (!formData.name.trim()) {
+      Alert.alert("Error", "Por favor ingrese el nombre de la categoría");
       return;
     }
     onSubmit(formData);
@@ -55,7 +38,7 @@ const ProductForm: React.FC<Props> = ({ onSubmit, initialData, buttonText = "Gua
         style={styles.input}
         value={formData.name}
         onChangeText={(text) => setFormData({ ...formData, name: text })}
-        placeholder="Ingrese el nombre del producto"
+        placeholder="Ingrese el nombre de la categoría"
       />
 
       <Text style={styles.label}>Descripción</Text>
@@ -67,39 +50,15 @@ const ProductForm: React.FC<Props> = ({ onSubmit, initialData, buttonText = "Gua
         multiline
       />
 
-      <Text style={styles.label}>Precio *</Text>
-      <TextInput
-        style={styles.input}
-        value={formData.price}
-        onChangeText={(text) => setFormData({ ...formData, price: text })}
-        placeholder="Ingrese el precio"
-        keyboardType="numeric"
-      />
-
-      <Text style={styles.label}>Stock *</Text>
-      <TextInput
-        style={styles.input}
-        value={formData.stock}
-        onChangeText={(text) => setFormData({ ...formData, stock: text })}
-        placeholder="Ingrese el stock"
-        keyboardType="numeric"
-      />
-
-      <Text style={styles.label}>Categoría *</Text>
+      <Text style={styles.label}>Estado</Text>
       <View style={styles.pickerContainer}>
         <Picker
-          selectedValue={formData.id_category}
-          onValueChange={(value) => setFormData({ ...formData, id_category: value })}
+          selectedValue={formData.status}
+          onValueChange={(value) => setFormData({ ...formData, status: value })}
           style={styles.picker}
         >
-          <Picker.Item label="Seleccione una categoría" value="" />
-          {categories.map((category) => (
-            <Picker.Item 
-              key={category.id_category} 
-              label={category.name} 
-              value={category.id_category} 
-            />
-          ))}
+          <Picker.Item label="Activo" value="1" />
+          <Picker.Item label="Inactivo" value="0" />
         </Picker>
       </View>
 
@@ -153,4 +112,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ProductForm;
+export default CategoryForm;

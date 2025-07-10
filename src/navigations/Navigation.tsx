@@ -4,9 +4,9 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
 
 //import screens
-import ProductListScreen from "../screens/ProductList";
-import ProductRegisterScreen from "../screens/ProductRegisterScreen";
-import ProductUpdateScreen from "../screens/ProductUpdateScreen";
+import ProductListScreen from "../screens/ProductScreens/ProductList";
+import ProductRegisterScreen from "../screens/ProductScreens/ProductRegisterScreen";
+import ProductUpdateScreen from "../screens/ProductScreens/ProductUpdateScreen";
 
 //import icon
 import AntDesign from "@expo/vector-icons/AntDesign";

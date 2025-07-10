@@ -1,9 +1,9 @@
-
-export interface IProduct{
-  id_product: string;         // ID del producto
-  name: string;           // Nombre
-  description: string;     // Descripción
-  price: string;       // Precio
-  stock: string;           // Stock disponible
-  status: string;          // Estado (por ejemplo: 1 = activo, 0 = inactivo)
+export interface IProduct {
+  id_product: string;
+  name: string;
+  description: string;
+  price: string;
+  stock: string;
+  status: string;
+  id_category: string; // Relación con categoría
 }
