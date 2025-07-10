@@ -1,27 +1,27 @@
 import React from "react";
 import { View, Text, StyleSheet, TouchableOpacity, Alert } from "react-native";
-import { ICategory } from "../api/types/ICategory";
+import { ISupplier } from "../api/types/ISupplier";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { CategoryStackParamList } from "../navigations/types";
-import { deleteCategory } from "../api/services/CategoryServices";
+import { SupplierStackParamList } from "../navigations/types";
+import { deleteSupplier } from "../api/services/SupplierServices";
 
 interface Props {
-  data: ICategory;
+  data: ISupplier;
   onDelete?: () => void;
 }
 
-const CategoryCard: React.FC<Props> = ({ data, onDelete }) => {
-  const navigation = useNavigation<NativeStackNavigationProp<CategoryStackParamList>>();
+const SupplierCard: React.FC<Props> = ({ data, onDelete }) => {
+  const navigation = useNavigation<NativeStackNavigationProp<SupplierStackParamList>>();
 
   const handleEdit = () => {
-    navigation.navigate("CategoryUpdate", { id: data.id_category });
+    navigation.navigate("SupplierUpdate", { id: data.id_supplier });
   };
 
   const handleDelete = async () => {
     Alert.alert(
       "Confirmar eliminación",
-      "¿Está seguro que desea eliminar esta categoría?",
+      "¿Está seguro que desea eliminar este proveedor?",
       [
         { text: "Cancelar", style: "cancel" },
         {
@@ -29,10 +29,10 @@ const CategoryCard: React.FC<Props> = ({ data, onDelete }) => {
           style: "destructive",
           onPress: async () => {
             try {
-              await deleteCategory(data.id_category);
+              await deleteSupplier(data.id_supplier);
               onDelete?.();
             } catch (error) {
-              Alert.alert("Error", "No se pudo eliminar la categoría");
+              Alert.alert("Error", "No se pudo eliminar el proveedor");
             }
           },
         },
@@ -43,7 +43,9 @@ const CategoryCard: React.FC<Props> = ({ data, onDelete }) => {
   return (
     <View style={styles.card}>
       <Text style={styles.title}>{data.name}</Text>
-      <Text style={styles.text}>Descripción: {data.description}</Text>
+      <Text style={styles.text}>Teléfono: {data.phone}</Text>
+      <Text style={styles.text}>Email: {data.email}</Text>
+      <Text style={styles.text}>Dirección: {data.address}</Text>
       <Text style={[styles.text, { color: data.status === "1" ? "green" : "red" }]}>
         Estado: {data.status === "1" ? "Activo" : "Inactivo"}
       </Text>
@@ -107,4 +109,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default CategoryCard;
+export default SupplierCard;

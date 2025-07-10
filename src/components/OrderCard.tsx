@@ -1,27 +1,27 @@
 import React from "react";
 import { View, Text, StyleSheet, TouchableOpacity, Alert } from "react-native";
-import { ICategory } from "../api/types/ICategory";
+import { IOrder } from "../api/types/IOrder";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { CategoryStackParamList } from "../navigations/types";
-import { deleteCategory } from "../api/services/CategoryServices";
+import { OrderStackParamList } from "../navigations/types";
+import { deleteOrder } from "../api/services/OrderServices";
 
 interface Props {
-  data: ICategory;
+  data: IOrder;
   onDelete?: () => void;
 }
 
-const CategoryCard: React.FC<Props> = ({ data, onDelete }) => {
-  const navigation = useNavigation<NativeStackNavigationProp<CategoryStackParamList>>();
+const OrderCard: React.FC<Props> = ({ data, onDelete }) => {
+  const navigation = useNavigation<NativeStackNavigationProp<OrderStackParamList>>();
 
   const handleEdit = () => {
-    navigation.navigate("CategoryUpdate", { id: data.id_category });
+    navigation.navigate("OrderUpdate", { id: data.id_order });
   };
 
   const handleDelete = async () => {
     Alert.alert(
       "Confirmar eliminación",
-      "¿Está seguro que desea eliminar esta categoría?",
+      "¿Está seguro que desea eliminar este pedido?",
       [
         { text: "Cancelar", style: "cancel" },
         {
@@ -29,10 +29,10 @@ const CategoryCard: React.FC<Props> = ({ data, onDelete }) => {
           style: "destructive",
           onPress: async () => {
             try {
-              await deleteCategory(data.id_category);
+              await deleteOrder(data.id_order);
               onDelete?.();
             } catch (error) {
-              Alert.alert("Error", "No se pudo eliminar la categoría");
+              Alert.alert("Error", "No se pudo eliminar el pedido");
             }
           },
         },
@@ -40,10 +40,25 @@ const CategoryCard: React.FC<Props> = ({ data, onDelete }) => {
     );
   };
 
+  const formatDate = (dateString: string) => {
+    return new Date(dateString).toLocaleDateString();
+  };
+
+  const formatCurrency = (amount: string) => {
+    const numAmount = parseFloat(amount);
+    return new Intl.NumberFormat('es-CO', {
+      style: 'currency',
+      currency: 'COP'
+    }).format(numAmount);
+  };
+
   return (
     <View style={styles.card}>
-      <Text style={styles.title}>{data.name}</Text>
-      <Text style={styles.text}>Descripción: {data.description}</Text>
+      <Text style={styles.title}>Pedido #{data.id_order}</Text>
+      <Text style={styles.text}>Cliente: {data.id_client}</Text>
+      <Text style={styles.text}>Fecha: {formatDate(data.order_date)}</Text>
+      <Text style={styles.text}>Total: {formatCurrency(data.total_amount)}</Text>
+      <Text style={styles.text}>Dirección: {data.delivery_address}</Text>
       <Text style={[styles.text, { color: data.status === "1" ? "green" : "red" }]}>
         Estado: {data.status === "1" ? "Activo" : "Inactivo"}
       </Text>
@@ -107,4 +122,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default CategoryCard;
+export default OrderCard;
