@@ -15,7 +15,7 @@ const CategoryCard: React.FC<Props> = ({ data, onDelete }) => {
   const navigation = useNavigation<NativeStackNavigationProp<CategoryStackParamList>>();
 
   const handleEdit = () => {
-    navigation.navigate("CategoryUpdate", { id: data.id_category });
+    navigation.navigate("CategoryUpdate", { id: data.id });
   };
 
   const handleDelete = async () => {
@@ -29,7 +29,7 @@ const CategoryCard: React.FC<Props> = ({ data, onDelete }) => {
           style: "destructive",
           onPress: async () => {
             try {
-              await deleteCategory(data.id_category);
+              await deleteCategory(data.id);
               onDelete?.();
             } catch (error) {
               Alert.alert("Error", "No se pudo eliminar la categoría");
@@ -42,11 +42,8 @@ const CategoryCard: React.FC<Props> = ({ data, onDelete }) => {
 
   return (
     <View style={styles.card}>
-      <Text style={styles.title}>{data.name}</Text>
-      <Text style={styles.text}>Descripción: {data.description}</Text>
-      <Text style={[styles.text, { color: data.status === "1" ? "green" : "red" }]}>
-        Estado: {data.status === "1" ? "Activo" : "Inactivo"}
-      </Text>
+      <Text style={styles.title}>{data.nombre}</Text>
+      <Text style={styles.text}>Descripción: {data.descripcion}</Text>
 
       <View style={styles.buttonContainer}>
         <TouchableOpacity style={styles.buttonEdit} onPress={handleEdit}>

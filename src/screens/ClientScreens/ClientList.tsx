@@ -67,7 +67,7 @@ const ClientList: React.FC = () => {
         <FlatList
           data={clients}
           renderItem={renderItem}
-          keyExtractor={(item) => item.id_client}
+          keyExtractor={(item) => item.id}
           contentContainerStyle={styles.listContainer}
         />
       )}

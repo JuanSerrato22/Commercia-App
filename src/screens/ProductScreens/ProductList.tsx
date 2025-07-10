@@ -14,17 +14,18 @@ const ProductList: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const navigation = useNavigation<NativeStackNavigationProp<ProductStackParamList>>();
 
-  const loadProducts = async () => {
-    try {
-      setLoading(true);
-      const data = await getAllProduct();
-      setProducts(data);
-    } catch (error) {
-      Alert.alert("Error", "No se pudieron cargar los productos");
-    } finally {
-      setLoading(false);
-    }
-  };
+const loadProducts = async () => {
+  try {
+    setLoading(true);
+    const data = await getAllProduct();
+    console.log("📦 Productos recibidos:", data); // 👈 Agregado
+    setProducts(data);
+  } catch (error) {
+    Alert.alert("Error", "No se pudieron cargar los productos");
+  } finally {
+    setLoading(false);
+  }
+};
 
   useFocusEffect(
     useCallback(() => {
@@ -67,7 +68,7 @@ const ProductList: React.FC = () => {
         <FlatList
           data={products}
           renderItem={renderItem}
-          keyExtractor={(item) => item.id_product}
+          keyExtractor={(item) => item.id}
           contentContainerStyle={styles.listContainer}
         />
       )}

@@ -1,5 +1,7 @@
 import { PRODUCT_END_POINT } from "../contants/Endpoint";
 import {IProduct} from "../types/IProduct"
+
+
 export const createProduct = async (register: IProduct) => {
   try {
     const response = await fetch(PRODUCT_END_POINT, {

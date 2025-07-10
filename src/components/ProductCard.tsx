@@ -15,7 +15,7 @@ const ProductCard: React.FC<Props> = ({ data, onDelete }) => {
     const navigation = useNavigation<NativeStackNavigationProp<ProductStackParamList>>();
 
     const handleEdit = () => {
-        navigation.navigate("ProductUpdate", { id: data.id_product });
+        navigation.navigate("ProductUpdate", { id: data.id });
     };
 
     const handleDelete = async () => {
@@ -29,7 +29,7 @@ const ProductCard: React.FC<Props> = ({ data, onDelete }) => {
                     style: "destructive",
                     onPress: async () => {
                         try {
-                            await deleteProduct(data.id_product);
+                            await deleteProduct(data.id);
                             onDelete?.();
                         } catch (error) {
                             Alert.alert("Error", "No se pudo eliminar el producto");
@@ -42,13 +42,10 @@ const ProductCard: React.FC<Props> = ({ data, onDelete }) => {
 
     return (
         <View style={styles.card}>
-            <Text style={styles.title}>{data.name}</Text>
-            <Text style={styles.text}>Descripción: {data.description}</Text>
-            <Text style={styles.text}>Precio: ${data.price}</Text>
+            <Text style={styles.title}>{data.nombre}</Text>
+            <Text style={styles.text}>Descripción: {data.descripcion}</Text>
+            <Text style={styles.text}>Precio: ${data.precio}</Text>
             <Text style={styles.text}>Stock: {data.stock}</Text>
-            <Text style={[styles.text, { color: data.status === "1" ? "green" : "red" }]}>
-                Estado: {data.status === "1" ? "Activo" : "Inactivo"}
-            </Text>
 
             <View style={styles.buttonContainer}>
                 <TouchableOpacity style={styles.buttonEdit} onPress={handleEdit}>

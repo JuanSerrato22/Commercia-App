@@ -68,7 +68,7 @@ const CategoryList: React.FC = () => {
         <FlatList
           data={categories}
           renderItem={renderItem}
-          keyExtractor={(item) => item.id_category}
+          keyExtractor={(item) => item.id}
           contentContainerStyle={styles.listContainer}
         />
       )}

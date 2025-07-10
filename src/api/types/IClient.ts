@@ -1,8 +1,9 @@
 export interface IClient {
-  id_client: string;
-  name: string;
+  id: string;
+  nombre: string;
+  apellido: string;
   email: string;
-  phone: string;
-  address: string;
-  status: string;
+  telefono: string;
+  direccion: string;
+  activo: string;
 }
