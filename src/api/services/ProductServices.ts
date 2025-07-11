@@ -19,7 +19,6 @@ export const createProduct = async (register: IProduct) => {
   }
 };
 
-
 export const getAllProduct = async () => {
   try {
     const response = await fetch(PRODUCT_END_POINT);
@@ -34,45 +33,51 @@ export const getAllProduct = async () => {
 
 export const getByIdProduct = async (id: string) => {
   try {
-    const response = await fetch(PRODUCT_END_POINT + id);
+    const response = await fetch(`${PRODUCT_END_POINT}/${id}`);
 
-    if (!response.ok) throw new Error("Error al actualizar el producto");
-    let data = await response.json();
+    if (!response.ok) throw new Error("Error al obtener el producto");
+
+    const data = await response.json();
     console.log(data);
     return data;
   } catch (error) {
-    return error;
+    console.error("Error al obtener producto:", error);
+    throw error;
   }
 };
 
-export const updateProduct = async (id: string, register: IProduct) => {
+
+export const updateProduct = async (id: string, product: IProduct) => {
   try {
-    const response = await fetch(PRODUCT_END_POINT + id, {
+    const response = await fetch(`${PRODUCT_END_POINT}/${id}`, {
       method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(register),
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(product),
     });
 
     if (!response.ok) throw new Error("Error al actualizar el producto");
-    let data = await response.json();
-    console.log(data);
-    return data;
+    return await response.json();
   } catch (error) {
-    return error;
+    console.error("Error en updateProduct:", error);
+    throw error;
   }
 };
 
+
 export const deleteProduct = async (id: string) => {
   try {
-    const response = await fetch(PRODUCT_END_POINT + id, {
+    const response = await fetch(`${PRODUCT_END_POINT}/${id}`, {
       method: "DELETE",
     });
 
     if (!response.ok) throw new Error("Error al eliminar el producto");
-    let data = await response.json();
-    console.log(data);
-    return data;
+
+    console.log("✅ Producto eliminado con éxito");
+    return true;
   } catch (error) {
-    return error;
+    console.error("Error en deleteProduct:", error);
+    throw error;
   }
 };

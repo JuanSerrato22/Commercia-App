@@ -15,7 +15,7 @@ const ClientCard: React.FC<Props> = ({ data, onDelete }) => {
   const navigation = useNavigation<NativeStackNavigationProp<ClientStackParamList>>();
 
   const handleEdit = () => {
-    navigation.navigate("ClientUpdate", { id: data.id_client });
+    navigation.navigate("ClientUpdate", { id: data.id });
   };
 
   const handleDelete = async () => {
@@ -29,7 +29,7 @@ const ClientCard: React.FC<Props> = ({ data, onDelete }) => {
           style: "destructive",
           onPress: async () => {
             try {
-              await deleteClient(data.id_client);
+              await deleteClient(data.id);
               onDelete?.();
             } catch (error) {
               Alert.alert("Error", "No se pudo eliminar el cliente");
@@ -42,12 +42,12 @@ const ClientCard: React.FC<Props> = ({ data, onDelete }) => {
 
   return (
     <View style={styles.card}>
-      <Text style={styles.title}>{data.name}</Text>
+      <Text style={styles.title}>{data.nombre}</Text>
       <Text style={styles.text}>Email: {data.email}</Text>
-      <Text style={styles.text}>Teléfono: {data.phone}</Text>
-      <Text style={styles.text}>Dirección: {data.address}</Text>
-      <Text style={[styles.text, { color: data.status === "1" ? "green" : "red" }]}>
-        Estado: {data.status === "1" ? "Activo" : "Inactivo"}
+      <Text style={styles.text}>Teléfono: {data.telefono}</Text>
+      <Text style={styles.text}>Dirección: {data.direccion}</Text>
+      <Text style={[styles.text, { color: data.activo === "1" ? "green" : "red" }]}>
+        Estado: {data.activo === "1" ? "Activo" : "Inactivo"}
       </Text>
 
       <View style={styles.buttonContainer}>
@@ -92,7 +92,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
   buttonEdit: {
-    backgroundColor: "#1e90ff",
+    backgroundColor: "#143D60",
     paddingVertical: 8,
     paddingHorizontal: 16,
     borderRadius: 8,

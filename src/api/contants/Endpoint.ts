@@ -1,4 +1,4 @@
-const API_BASE_URL = "http://192.168.1.5:8085/api";
+const API_BASE_URL = "http://172.30.0.63:8085/api";
 
 export const PRODUCT_END_POINT   = `${API_BASE_URL}/productos`;
 export const CATEGORY_END_POINT = `${API_BASE_URL}/categorias`;

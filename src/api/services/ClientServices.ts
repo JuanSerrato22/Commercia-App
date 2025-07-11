@@ -1,6 +1,7 @@
 import { CLIENT_END_POINT } from "../contants/Endpoint";
 import { IClient } from "../types/IClient";
 
+
 export const createClient = async (register: IClient) => {
   try {
     const response = await fetch(CLIENT_END_POINT, {

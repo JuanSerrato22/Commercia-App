@@ -15,7 +15,7 @@ const OrderCard: React.FC<Props> = ({ data, onDelete }) => {
   const navigation = useNavigation<NativeStackNavigationProp<OrderStackParamList>>();
 
   const handleEdit = () => {
-    navigation.navigate("OrderUpdate", { id: data.id_order });
+    navigation.navigate("OrderUpdate", { id: data.id });
   };
 
   const handleDelete = async () => {
@@ -29,7 +29,7 @@ const OrderCard: React.FC<Props> = ({ data, onDelete }) => {
           style: "destructive",
           onPress: async () => {
             try {
-              await deleteOrder(data.id_order);
+              await deleteOrder(data.id);
               onDelete?.();
             } catch (error) {
               Alert.alert("Error", "No se pudo eliminar el pedido");
@@ -54,14 +54,11 @@ const OrderCard: React.FC<Props> = ({ data, onDelete }) => {
 
   return (
     <View style={styles.card}>
-      <Text style={styles.title}>Pedido #{data.id_order}</Text>
-      <Text style={styles.text}>Cliente: {data.id_client}</Text>
-      <Text style={styles.text}>Fecha: {formatDate(data.order_date)}</Text>
-      <Text style={styles.text}>Total: {formatCurrency(data.total_amount)}</Text>
-      <Text style={styles.text}>Dirección: {data.delivery_address}</Text>
-      <Text style={[styles.text, { color: data.status === "1" ? "green" : "red" }]}>
-        Estado: {data.status === "1" ? "Activo" : "Inactivo"}
-      </Text>
+      <Text style={styles.title}>Pedido #{data.id}</Text>
+      <Text style={styles.text}>Cliente: {data.cliente_id}</Text>
+      <Text style={styles.text}>Fecha: {formatDate(data.fecha)}</Text>
+      <Text style={styles.text}>Total: {formatCurrency(data.total)}</Text>
+      <Text style={styles.text}>Dirección: {data.direccion}</Text>
 
       <View style={styles.buttonContainer}>
         <TouchableOpacity style={styles.buttonEdit} onPress={handleEdit}>
@@ -105,7 +102,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
   buttonEdit: {
-    backgroundColor: "#1e90ff",
+    backgroundColor: "#143D60",
     paddingVertical: 8,
     paddingHorizontal: 16,
     borderRadius: 8,

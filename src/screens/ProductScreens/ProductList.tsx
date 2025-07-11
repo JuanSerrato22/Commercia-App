@@ -6,6 +6,7 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { ProductStackParamList } from "../../navigations/types";
 import { IProduct } from "../../api/types/IProduct";
 import { getAllProduct } from "../../api/services/ProductServices";
+import { deleteProduct } from "../../api/services/ProductServices";
 import ProductCard from "../../components/ProductCard";
 import AntDesign from "@expo/vector-icons/AntDesign";
 
@@ -37,13 +38,43 @@ const loadProducts = async () => {
     navigation.navigate("ProductRegister");
   };
 
-  const handleDeleteProduct = () => {
-    loadProducts(); // Recargar la lista después de eliminar
-  };
+  const handleDeleteProduct = (id: string) => {
+  Alert.alert(
+    "Confirmar eliminación",
+    "¿Estás seguro de que deseas eliminar este producto?",
+    [
+      {
+        text: "Cancelar",
+        style: "cancel",
+      },
+      {
+        text: "Eliminar",
+        style: "destructive",
+        onPress: async () => {
+          try {
+            await deleteProduct(id);
+
+            // ⛔ Ya no llames a loadProducts aquí
+            // ✅ En su lugar, elimina el producto del estado actual
+            setProducts((prev) => prev.filter((p) => p.id !== id));
+
+            Alert.alert("Éxito", "Producto eliminado correctamente");
+          } catch (error) {
+            Alert.alert("Error", "No se pudo eliminar el producto");
+          }
+        },
+      },
+    ]
+  );
+};
+
 
   const renderItem = ({ item }: { item: IProduct }) => (
-    <ProductCard data={item} onDelete={handleDeleteProduct} />
-  );
+  <ProductCard
+    data={item}
+    onDelete={() => handleDeleteProduct(item.id)} // ✅ Aquí se pasa el id
+  />
+);
 
   if (loading) {
     return (
@@ -87,7 +118,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   addButton: {
-    backgroundColor: "#007bff",
+    backgroundColor: "#143D60",
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",

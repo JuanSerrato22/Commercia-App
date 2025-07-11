@@ -11,37 +11,37 @@ interface Props {
 
 const OrderForm: React.FC<Props> = ({ onSubmit, initialData, buttonText = "Guardar" }) => {
   const [formData, setFormData] = useState<IOrder>({
-    id_order: "",
-    id_client: "",
-    order_date: new Date().toISOString().split('T')[0],
-    total_amount: "0",
-    status: "1",
-    delivery_address: "",
+    id: "",
+    cliente_id: "",
+    fecha: new Date().toISOString().split('T')[0],
+    total: "0",
+    estado: "",
+    direccion: "",
   });
 
   useEffect(() => {
     if (initialData) {
       setFormData({
         ...initialData,
-        order_date: initialData.order_date ? new Date(initialData.order_date).toISOString().split('T')[0] : new Date().toISOString().split('T')[0]
+        fecha: initialData.fecha ? new Date(initialData.fecha).toISOString().split('T')[0] : new Date().toISOString().split('T')[0]
       });
     }
   }, [initialData]);
 
   const handleSubmit = () => {
-    if (!formData.id_client.trim()) {
+    if (!formData.id.trim()) {
       Alert.alert("Error", "Por favor ingrese el ID del cliente");
       return;
     }
-    if (!formData.order_date.trim()) {
+    if (!formData.fecha.trim()) {
       Alert.alert("Error", "Por favor ingrese la fecha del pedido");
       return;
     }
-    if (parseFloat(formData.total_amount) <= 0) {
+    if (parseFloat(formData.total) <= 0) {
       Alert.alert("Error", "Por favor ingrese un total válido");
       return;
     }
-    if (!formData.delivery_address.trim()) {
+    if (!formData.direccion.trim()) {
       Alert.alert("Error", "Por favor ingrese la dirección de entrega");
       return;
     }
@@ -53,27 +53,27 @@ const OrderForm: React.FC<Props> = ({ onSubmit, initialData, buttonText = "Guard
       <Text style={styles.label}>ID Cliente *</Text>
       <TextInput
         style={styles.input}
-        value={formData.id_client}
-        onChangeText={(text) => setFormData({ ...formData, id_client: text })}
+        value={formData.cliente_id}
+        onChangeText={(text) => setFormData({ ...formData, cliente_id: text })}
         placeholder="Ingrese el ID del cliente"
       />
 
       <Text style={styles.label}>Fecha *</Text>
       <TextInput
         style={styles.input}
-        value={formData.order_date}
-        onChangeText={(text) => setFormData({ ...formData, order_date: text })}
+        value={formData.fecha}
+        onChangeText={(text) => setFormData({ ...formData, fecha: text })}
         placeholder="YYYY-MM-DD"
       />
 
       <Text style={styles.label}>Total *</Text>
       <TextInput
         style={styles.input}
-        value={formData.total_amount}
+        value={formData.total}
         onChangeText={(text) => {
           // Asegurar que solo se ingresen números válidos
           const numericValue = text.replace(/[^0-9.]/g, '');
-          setFormData({ ...formData, total_amount: numericValue });
+          setFormData({ ...formData, total: numericValue });
         }}
         placeholder="Ingrese el total del pedido"
         keyboardType="numeric"
@@ -82,24 +82,12 @@ const OrderForm: React.FC<Props> = ({ onSubmit, initialData, buttonText = "Guard
       <Text style={styles.label}>Dirección de entrega *</Text>
       <TextInput
         style={styles.input}
-        value={formData.delivery_address}
-        onChangeText={(text) => setFormData({ ...formData, delivery_address: text })}
+        value={formData.direccion}
+        onChangeText={(text) => setFormData({ ...formData, direccion: text })}
         placeholder="Ingrese la dirección de entrega"
         multiline
         numberOfLines={3}
       />
-
-      <Text style={styles.label}>Estado</Text>
-      <View style={styles.pickerContainer}>
-        <Picker
-          selectedValue={formData.status}
-          onValueChange={(value) => setFormData({ ...formData, status: value })}
-          style={styles.picker}
-        >
-          <Picker.Item label="Activo" value="1" />
-          <Picker.Item label="Inactivo" value="0" />
-        </Picker>
-      </View>
 
       <TouchableOpacity style={styles.button} onPress={handleSubmit}>
         <Text style={styles.buttonText}>{buttonText}</Text>
@@ -138,7 +126,7 @@ const styles = StyleSheet.create({
     height: 50,
   },
   button: {
-    backgroundColor: "#007bff",
+    backgroundColor: "#143D60",
     padding: 15,
     borderRadius: 8,
     alignItems: "center",

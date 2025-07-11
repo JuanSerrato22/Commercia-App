@@ -67,7 +67,7 @@ const OrderList: React.FC = () => {
         <FlatList
           data={orders}
           renderItem={renderItem}
-          keyExtractor={(item) => item.id_order}
+          keyExtractor={(item) => item.id}
           contentContainerStyle={styles.listContainer}
         />
       )}
@@ -86,7 +86,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   addButton: {
-    backgroundColor: "#007bff",
+    backgroundColor: "#143D60",
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",

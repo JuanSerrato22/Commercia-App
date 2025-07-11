@@ -11,12 +11,13 @@ interface Props {
 
 const ClientForm: React.FC<Props> = ({ onSubmit, initialData, buttonText = "Guardar" }) => {
   const [formData, setFormData] = useState<IClient>({
-    id_client: "",
-    name: "",
+    id: "",
+    nombre: "",
+    apellido: "",
     email: "",
-    phone: "",
-    address: "",
-    status: "1",
+    telefono: "",
+    direccion: "",
+    activo: "1",
   });
 
   useEffect(() => {
@@ -26,7 +27,7 @@ const ClientForm: React.FC<Props> = ({ onSubmit, initialData, buttonText = "Guar
   }, [initialData]);
 
   const handleSubmit = () => {
-    if (!formData.name.trim() || !formData.email.trim() || !formData.phone.trim()) {
+    if (!formData.nombre.trim() || !formData.email.trim() || !formData.telefono.trim()) {
       Alert.alert("Error", "Por favor complete todos los campos obligatorios");
       return;
     }
@@ -46,8 +47,8 @@ const ClientForm: React.FC<Props> = ({ onSubmit, initialData, buttonText = "Guar
       <Text style={styles.label}>Nombre *</Text>
       <TextInput
         style={styles.input}
-        value={formData.name}
-        onChangeText={(text) => setFormData({ ...formData, name: text })}
+        value={formData.nombre}
+        onChangeText={(text) => setFormData({ ...formData, nombre: text })}
         placeholder="Ingrese el nombre del cliente"
       />
 
@@ -64,8 +65,8 @@ const ClientForm: React.FC<Props> = ({ onSubmit, initialData, buttonText = "Guar
       <Text style={styles.label}>Teléfono *</Text>
       <TextInput
         style={styles.input}
-        value={formData.phone}
-        onChangeText={(text) => setFormData({ ...formData, phone: text })}
+        value={formData.telefono}
+        onChangeText={(text) => setFormData({ ...formData, telefono: text })}
         placeholder="Ingrese el teléfono"
         keyboardType="phone-pad"
       />
@@ -73,8 +74,8 @@ const ClientForm: React.FC<Props> = ({ onSubmit, initialData, buttonText = "Guar
       <Text style={styles.label}>Dirección</Text>
       <TextInput
         style={styles.input}
-        value={formData.address}
-        onChangeText={(text) => setFormData({ ...formData, address: text })}
+        value={formData.direccion}
+        onChangeText={(text) => setFormData({ ...formData, direccion: text })}
         placeholder="Ingrese la dirección"
         multiline
       />
@@ -82,8 +83,8 @@ const ClientForm: React.FC<Props> = ({ onSubmit, initialData, buttonText = "Guar
       <Text style={styles.label}>Estado</Text>
       <View style={styles.pickerContainer}>
         <Picker
-          selectedValue={formData.status}
-          onValueChange={(value) => setFormData({ ...formData, status: value })}
+          selectedValue={formData.activo}
+          onValueChange={(value) => setFormData({ ...formData, activo: value })}
           style={styles.picker}
         >
           <Picker.Item label="Activo" value="1" />
@@ -128,7 +129,7 @@ const styles = StyleSheet.create({
     height: 50,
   },
   button: {
-    backgroundColor: "#007bff",
+    backgroundColor: "#143D60",
     padding: 15,
     borderRadius: 8,
     alignItems: "center",

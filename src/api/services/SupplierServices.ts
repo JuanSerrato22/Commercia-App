@@ -1,6 +1,7 @@
 import { SUPPLIER_END_POINT } from "../contants/Endpoint";
 import { ISupplier } from "../types/ISupplier";
 
+
 export const createSupplier = async (register: ISupplier) => {
   try {
     const response = await fetch(SUPPLIER_END_POINT, {

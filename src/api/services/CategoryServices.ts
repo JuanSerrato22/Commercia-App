@@ -1,5 +1,7 @@
 import { CATEGORY_END_POINT } from "../contants/Endpoint";
 import { ICategory } from "../types/ICategory";
+
+
 export const createCategory = async (register: ICategory) => {
   try {
     const response = await fetch(CATEGORY_END_POINT, {

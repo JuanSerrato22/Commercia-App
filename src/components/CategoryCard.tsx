@@ -87,7 +87,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
   buttonEdit: {
-    backgroundColor: "#1e90ff",
+    backgroundColor: "#143D60",
     paddingVertical: 8,
     paddingHorizontal: 16,
     borderRadius: 8,

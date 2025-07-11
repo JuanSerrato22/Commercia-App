@@ -1,4 +1,3 @@
-// components/ProductForm.tsx
 import React, { useState, useEffect } from "react";
 import { View, Text, TextInput, StyleSheet, TouchableOpacity, Alert } from "react-native";
 import { IProduct } from "../api/types/IProduct";
@@ -13,19 +12,27 @@ interface Props {
 }
 
 const ProductForm: React.FC<Props> = ({ onSubmit, initialData, buttonText = "Guardar" }) => {
-  const [formData, setFormData] = useState<IProduct>({
+  const [formData, setFormData] = useState({
     id: "",
     nombre: "",
     descripcion: "",
     precio: "",
     stock: "",
-    categoria_id: "",
+    categoriaId: "",
   });
+
   const [categories, setCategories] = useState<ICategory[]>([]);
 
   useEffect(() => {
     if (initialData) {
-      setFormData(initialData);
+      setFormData({
+        id: initialData.id,
+        nombre: initialData.nombre,
+        descripcion: initialData.descripcion,
+        precio: initialData.precio.toString(),
+        stock: initialData.stock.toString(),
+        categoriaId: initialData.categoria?.id?.toString() || "",
+      });
     }
     loadCategories();
   }, [initialData]);
@@ -40,12 +47,23 @@ const ProductForm: React.FC<Props> = ({ onSubmit, initialData, buttonText = "Gua
   };
 
   const handleSubmit = () => {
-    if (!formData.nombre || !formData.precio || !formData.stock || !formData.categoria_id) {
+    if (!formData.nombre || !formData.precio || !formData.stock || !formData.categoriaId) {
       Alert.alert("Error", "Por favor complete todos los campos obligatorios");
       return;
     }
-    
-    onSubmit(formData);
+
+    const productToSend: IProduct = {
+      id: formData.id,
+      nombre: formData.nombre,
+      descripcion: formData.descripcion,
+      precio: Number(formData.precio),
+      stock: Number(formData.stock),
+      categoria: {
+        id: parseInt(formData.categoriaId),
+      },
+    };
+
+    onSubmit(productToSend);
   };
 
   return (
@@ -64,7 +82,6 @@ const ProductForm: React.FC<Props> = ({ onSubmit, initialData, buttonText = "Gua
         value={formData.descripcion}
         onChangeText={(text) => setFormData({ ...formData, descripcion: text })}
         placeholder="Ingrese la descripción"
-        multiline
       />
 
       <Text style={styles.label}>Precio *</Text>
@@ -88,17 +105,13 @@ const ProductForm: React.FC<Props> = ({ onSubmit, initialData, buttonText = "Gua
       <Text style={styles.label}>Categoría *</Text>
       <View style={styles.pickerContainer}>
         <Picker
-          selectedValue={formData.categoria_id}
-          onValueChange={(value) => setFormData({ ...formData, categoria_id: value })}
+          selectedValue={formData.categoriaId}
+          onValueChange={(value) => setFormData({ ...formData, categoriaId: value })}
           style={styles.picker}
         >
           <Picker.Item label="Seleccione una categoría" value="" />
           {categories.map((category) => (
-            <Picker.Item 
-              key={category.id} 
-              label={category.nombre} 
-              value={category.id} 
-            />
+            <Picker.Item key={category.id} label={category.nombre} value={category.id.toString()} />
           ))}
         </Picker>
       </View>
@@ -140,7 +153,7 @@ const styles = StyleSheet.create({
     height: 50,
   },
   button: {
-    backgroundColor: "#007bff",
+    backgroundColor: "#143D60",
     padding: 15,
     borderRadius: 8,
     alignItems: "center",
